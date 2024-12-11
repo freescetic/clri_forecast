@@ -87,6 +87,10 @@ def main():
         start_year = st.number_input("Start Year:", min_value=2023, max_value=2040, value=2023)
         end_year = st.number_input("End Year:", min_value=start_year, max_value=2040, value=2032)
 
+        # Figsize input
+        figsize_width = st.number_input("Figure Width:", min_value=5, max_value=20, value=10)
+        figsize_height = st.number_input("Figure Height:", min_value=5, max_value=20, value=6)
+
         if st.button("Forecast"):
             df_country = df[df['Year'] <= 2022].copy()
 
@@ -117,7 +121,7 @@ def main():
             st.table(forecast_df)
 
             # Plot the forecast
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=(figsize_width, figsize_height))  # Use user-defined figsize
             plt.plot(df_country['Year'], df_country['Export'], label='Actual')
             plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
             plt.xlabel('Year')
@@ -161,6 +165,10 @@ def main():
         start_year = st.number_input("Simulation Start Year:", min_value=2023, max_value=2050, value=2023)
         end_year = st.number_input("Simulation End Year:", min_value=start_year, max_value=2050, value=2032)
 
+        # Figsize input
+        figsize_width = st.number_input("Figure Width:", min_value=5, max_value=20, value=10, key="sim_width")
+        figsize_height = st.number_input("Figure Height:", min_value=5, max_value=20, value=6, key="sim_height")
+
         if st.button("Simulate"):
             if model_choice == "ARIMA":
                 forecast = forecast_arima(edited_df, start_year, end_year)
@@ -173,7 +181,7 @@ def main():
             st.table(forecast_df)
 
             # Plot the forecast
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=(figsize_width, figsize_height))  # Use user-defined figsize
             plt.plot(edited_df['Year'], edited_df['Export'], label='Actual (Edited)')
             plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
             plt.xlabel('Year')

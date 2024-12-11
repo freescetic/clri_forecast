@@ -187,7 +187,9 @@ def main():
             plt.xlabel('Year')
             plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
             plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+            plt.ylim(0, edited_df['Export'].max() * 1.5)
             plt.legend()
+            plt.tight_layout()
             st.pyplot(plt)
 
 if __name__ == "__main__":

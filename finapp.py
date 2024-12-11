@@ -7,17 +7,17 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from statsmodels.tsa.arima.model import ARIMA
 
-# Read the CSV file into a DataFrame (replace 'your_file.xlsx' with your actual file name)
+# Reading the CSV file into a DataFrame
 df = pd.read_excel('CLRI FMCG ML Model Dataset Ajay Vikhram S M and Diwin Joshua.xlsx')
 
 # Function to forecast using LSTM
 def forecast_lstm(df_country, start_year, end_year):
-    # Prepare data for LSTM
+    # Preparing data for LSTM
     data = df_country['Export'].values.reshape(-1, 1)
     scaler = MinMaxScaler()
     data = scaler.fit_transform(data)
 
-    # Create training dataset
+    # Creating training dataset
     train_size = int(len(data) * 0.8)
     train_data = data[:train_size]
     test_data = data[train_size:]
@@ -34,7 +34,7 @@ def forecast_lstm(df_country, start_year, end_year):
     X_train, Y_train = create_dataset(train_data, look_back)
     X_test, Y_test = create_dataset(test_data, look_back)
 
-    # Reshape input to be [samples, time steps, features]
+    # Reshaping input to be [samples, time steps, features]
     X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
     X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
 
@@ -46,7 +46,7 @@ def forecast_lstm(df_country, start_year, end_year):
     model.compile(loss='mean_squared_error', optimizer='adam')
     model.fit(X_train, Y_train, epochs=200, batch_size=1, verbose=0)
 
-    # Forecast future values
+    # Forecasting future values
     future_predictions = []
     last_values = data[-look_back:]  # Last 'look_back' values
     forecast_years = end_year - start_year + 1

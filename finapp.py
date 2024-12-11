@@ -112,23 +112,34 @@ def main():
 
             if model_choice == "ARIMA":
                 forecast = forecast_arima(df_country, start_year, end_year)
+                # Plot the forecast (ARIMA) - No ylim adjustment
+                plt.figure(figsize=(figsize_width, figsize_height))
+                plt.plot(df_country['Year'], df_country['Export'], label='Actual')
+                plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
+                plt.xlabel('Year')
+                plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.legend()
+                st.pyplot(plt)                
             else:  # LSTM
                 forecast = forecast_lstm(df_country, start_year, end_year)
+                # Plot the forecast (LSTM) - With ylim adjustment
+                plt.figure(figsize=(figsize_width, figsize_height))
+                plt.plot(df_country['Year'], df_country['Export'], label='Actual')
+                plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
+                plt.xlabel('Year')
+                plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                max_value = max(df_country['Export'].max(), max(forecast))
+                plt.ylim(0, max_value * 1.5)
+                plt.legend()
+                st.pyplot(plt)
 
             # Display results
             st.subheader("Forecast Results")
             forecast_df = pd.DataFrame({'Year': range(start_year, end_year + 1), 'Forecast Export': forecast})
             st.table(forecast_df)
 
-            # Plot the forecast
-            plt.figure(figsize=(figsize_width, figsize_height))  # Use user-defined figsize
-            plt.plot(df_country['Year'], df_country['Export'], label='Actual')
-            plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
-            plt.xlabel('Year')
-            plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
-            plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
-            plt.legend()
-            st.pyplot(plt)
 
     with tab2:
         st.header("Simulate Export Scenarios")
@@ -172,25 +183,33 @@ def main():
         if st.button("Simulate"):
             if model_choice == "ARIMA":
                 forecast = forecast_arima(edited_df, start_year, end_year)
+                # Plot the forecast (ARIMA) - No ylim adjustment
+                plt.figure(figsize=(figsize_width, figsize_height))
+                plt.plot(edited_df['Year'], edited_df['Export'], label='Actual (Edited)')
+                plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
+                plt.xlabel('Year')
+                plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.legend()
+                st.pyplot(plt)
             else:  # LSTM
                 forecast = forecast_lstm(edited_df, start_year, end_year)
+                # Plot the forecast (LSTM) - With ylim adjustment
+                plt.figure(figsize=(figsize_width, figsize_height))
+                plt.plot(edited_df['Year'], edited_df['Export'], label='Actual (Edited)')
+                plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
+                plt.xlabel('Year')
+                plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
+                max_value = max(edited_df['Export'].max(), max(forecast))
+                plt.ylim(0, max_value * 1.5)
+                plt.legend()
+                st.pyplot(plt)
 
             # Display results
             st.subheader("Simulation Results")
             forecast_df = pd.DataFrame({'Year': range(start_year, end_year + 1), 'Forecast Export': forecast})
             st.table(forecast_df)
-
-            # Plot the forecast
-            plt.figure(figsize=(figsize_width, figsize_height))  # Use user-defined figsize
-            plt.plot(edited_df['Year'], edited_df['Export'], label='Actual (Edited)')
-            plt.plot(range(start_year, end_year + 1), forecast, label='Forecast')
-            plt.xlabel('Year')
-            plt.ylabel(f'Export to {country_name} from India in US$ Thousand (Hides and Skins)')
-            plt.title(f'Forecast of Export to {country_name} from India in US$ Thousand (Hides and Skins)')
-            plt.ylim(0, edited_df['Export'].max() * 1.5)
-            plt.legend()
-            plt.tight_layout()
-            st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
